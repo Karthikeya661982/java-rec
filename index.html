@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java CodeVault & Virtual Lab Record | B. Sasi Kailash</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            dark: '#0a0d14',
+                            card: '#111625',
+                            border: '#1f293d',
+                            accent: '#00f0ff',
+                            purple: '#7000ff',
+                            neon: '#39ff14'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'Courier New', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #06090e;
+            color: #e2e8f0;
+        }
+        .glass-panel {
+            background: rgba(17, 22, 37, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-panel-hover:hover {
+            border-color: rgba(0, 240, 255, 0.4);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #00f0ff 0%, #7000ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0a0d14;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #1f293d;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #00f0ff;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col md:flex-row overflow-x-hidden custom-scrollbar">
+
+    <aside id="sidebar" class="w-full md:w-72 bg-[#090d16] border-r border-[#1e293b] flex-shrink-0 flex flex-col justify-between hidden md:flex min-h-screen sticky top-0 z-30">
+        <div>
+            <!-- Header Brand -->
+            <div class="p-5 border-b border-[#1e293b] flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/20">
+                        <i class="fa-solid fa-code text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-base tracking-wide gradient-text">CodeVault</h1>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-widest">Java Virtual Record</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Summary Widget -->
+            <div class="p-4 border-b border-[#1e293b] bg-[#0d1322]">
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <img src="assets/profile.png" onerror="this.src='https://placehold.co/100x100/1e293b/00f0ff?text=BK'" alt="Profile" class="w-12 h-12 rounded-full border-2 border-cyan-400/50 object-cover">
+                        <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-[#0d1322] rounded-full"></span>
+                    </div>
+                    <div class="overflow-hidden">
+                        <h2 class="text-sm font-semibold text-white truncate">B. Sasi Kailash</h2>
+                        <p class="text-xs text-cyan-400 font-mono">25EU02069</p>
+                        <p class="text-[11px] text-gray-400 truncate">II Year • AI & ML (Sec B)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="p-3 space-y-1 custom-scrollbar overflow-y-auto max-h-[calc(100vh-250px)]">
+                <button onclick="switchView('home')" id="nav-home" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
+                    <i class="fa-solid fa-house w-5 text-center"></i>
+                    <span>Dashboard Home</span>
+                </button>
+
+                <div class="pt-3 pb-1 px-3 text-[10px] font-bold text-gray-400 uppercase tracking-wider">LAB WEEKS</div>
+
+                <div id="sidebar-weeks-container" class="space-y-1">
+                    <!-- Dynamic Week Navigation Links JS Populated -->
+                </div>
+            </nav>
+        </div>
+
+        <!-- Footer Info -->
+        <div class="p-4 border-t border-[#1e293b] text-center bg-[#070a10]">
+            <p class="text-xs text-gray-400">Java Programming Lab</p>
+            <p class="text-[10px] text-gray-400 mt-1">Academic Record 2026</p>
+        </div>
+    </aside>
+
+    <!-- Mobile Navigation Drawer Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-black/80 z-50 hidden md:hidden flex flex-col">
+        <div class="p-4 border-b border-[#1e293b] flex items-center justify-between bg-[#0a0d14]">
+            <div class="flex items-center gap-3">
+                <img src="assets/profile.png" onerror="this.src='https://placehold.co/100x100/1e293b/00f0ff?text=BK'" class="w-8 h-8 rounded-full border border-cyan-400">
+                <span class="font-bold text-white text-sm">B. Sasi Kailash (25EU02069)</span>
+            </div>
+            <button onclick="toggleMobileMenu()" class="text-gray-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+        <div class="p-4 overflow-y-auto space-y-2 flex-1" id="mobile-weeks-container">
+            <!-- Mobile Links Populated by JS -->
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 flex flex-col min-w-0 min-h-screen">
+
+        <header class="h-16 border-b border-[#1e293b] bg-[#090d16]/90 backdrop-blur-md sticky top-0 z-20 flex items-center justify-between px-4 md:px-8">
+            <div class="flex items-center gap-3">
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+                <div class="relative w-48 sm:w-80">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400"></i>
+                    <input type="text" id="global-search" oninput="handleSearch(this.value)" placeholder="Search programs, keywords..." class="w-full bg-[#111625] text-xs text-gray-200 pl-9 pr-4 py-2 rounded-lg border border-[#1f293d] focus:outline-none focus:border-cyan-500 transition-colors">
+                </div>
+            </div>
+
+            <!-- Header Quick Actions -->
+            <div class="flex items-center gap-3">
+                <a href="#code-viewer-modal" onclick="window.print()" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-700 hover:border-gray-500 text-xs text-gray-300 transition-colors">
+                    <i class="fa-solid fa-print"></i>
+                    <span>Print Record</span>
+                </a>
+                <div class="text-right hidden sm:block">
+                    <span class="block text-xs font-semibold text-white">Java Programming</span>
+                    <span class="block text-[10px] text-cyan-400">Section B • II Year</span>
+                </div>
+            </div>
+        </header>
+
+        <div id="content-container" class="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
+            
+            <!-- HOME VIEW -->
+            <div id="view-home" class="space-y-8">
+                <!-- Hero Section -->
+                <div class="glass-panel rounded-2xl p-6 md:p-8 relative overflow-hidden bg-gradient-to-br from-[#0e1628] via-[#090e1a] to-[#120d24] border border-cyan-500/20">
+                    <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute right-1/3 -top-10 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                    <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                        <div class="space-y-3 max-w-2xl">
+                            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> Virtual Lab Portfolio
+                            </span>
+                            <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight text-white">
+                                Welcome to Java CodeVault
+                            </h1>
+                            <p class="text-sm text-gray-300 leading-relaxed">
+                                Comprehensive Virtual Object-Oriented Programming & Java Practical Record. Designed for seamless code inspection, execution simulation, and structural understanding.
+                            </p>
+                        </div>
+
+                        <!-- Profile Display Card inside Hero -->
+                        <div class="w-full md:w-auto glass-panel p-4 rounded-xl border border-white/10 flex items-center gap-4 bg-[#0a0f1d]/80 min-w-[280px]">
+                            <img src="assets/profile.png" onerror="this.src='https://placehold.co/100x100/1e293b/00f0ff?text=BK'" class="w-16 h-16 rounded-xl border-2 border-cyan-400 object-cover shadow-lg">
+                            <div class="space-y-0.5">
+                                <h3 class="text-sm font-bold text-white">B. Sasi Kailash</h3>
+                                <p class="text-xs text-cyan-400 font-mono">Roll: 25EU02069</p>
+                                <p class="text-xs text-gray-400">Branch: AI & ML (Sec B)</p>
+                                <p class="text-[11px] text-purple-400">Subject: Java Lab</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Lab Metrics Bar -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 pt-6 border-t border-gray-800">
+                        <div class="bg-[#0b101c] p-3.5 rounded-xl border border-gray-800">
+                            <p class="text-[11px] text-gray-400">Total Modules</p>
+                            <p class="text-xl font-bold text-cyan-400">9 Weeks</p>
+                        </div>
+                        <div class="bg-[#0b101c] p-3.5 rounded-xl border border-gray-800">
+                            <p class="text-[11px] text-gray-400">Completed Programs</p>
+                            <p class="text-xl font-bold text-purple-400">65+ Codes</p>
+                        </div>
+                        <div class="bg-[#0b101c] p-3.5 rounded-xl border border-gray-800">
+                            <p class="text-[11px] text-gray-400">Current Semester</p>
+                            <p class="text-xl font-bold text-emerald-400">II Year</p>
+                        </div>
+                        <div class="bg-[#0b101c] p-3.5 rounded-xl border border-gray-800">
+                            <p class="text-[11px] text-gray-400">Completion Status</p>
+                            <p class="text-xl font-bold text-yellow-400">100% Verified</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lab Weeks Grid Container -->
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-folder-tree text-cyan-400"></i> Academic Practical Modules
+                        </h2>
+                        <span class="text-xs text-gray-400">Select a week to view programs</span>
+                    </div>
+
+                    <div id="home-weeks-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- DYNAMIC WEEK VIEW -->
+            <div id="view-week" class="hidden space-y-6">
+                <!-- Header Card for Selected Week -->
+                <div id="week-header" class="glass-panel p-6 rounded-2xl border border-cyan-500/20 bg-gradient-to-r from-[#0d1527] to-[#120f26]">
+                    <!-- JS Injected Header Info -->
+                </div>
+
+                <!-- Programs Container -->
+                <div id="week-programs-list" class="space-y-4">
+                    <!-- JS Injected Programs List -->
+                </div>
+            </div>
+
+            <!-- SEARCH RESULTS VIEW -->
+            <div id="view-search" class="hidden space-y-6">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-bold text-white">Search Results</h2>
+                    <span id="search-count" class="text-xs text-cyan-400">0 programs found</span>
+                </div>
+                <div id="search-results-list" class="space-y-4"></div>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="code-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-2 sm:p-6">
+        <div class="glass-panel w-full max-w-5xl h-[90vh] rounded-2xl flex flex-col overflow-hidden border border-cyan-500/30 shadow-2xl bg-[#0a0e17]">
+            
+            <!-- Modal Top Bar -->
+            <div class="p-4 bg-[#0d1320] border-b border-gray-800 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    <span id="modal-title" class="ml-2 font-mono text-xs sm:text-sm text-cyan-400 font-semibold truncate">Program Title</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="copyModalCode()" id="copy-btn" class="px-3 py-1.5 rounded-lg bg-[#182238] hover:bg-[#212f4d] text-xs text-gray-300 flex items-center gap-1.5 border border-gray-700">
+                        <i class="fa-regular fa-copy"></i> Copy Code
+                    </button>
+                    <button onclick="closeModal()" class="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Content (Code & Output Split Panel) -->
+            <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 overflow-hidden">
+                <!-- Source Code View (Left / Top) -->
+                <div class="lg:col-span-7 p-4 bg-[#070a11] overflow-y-auto border-r border-gray-800 custom-scrollbar flex flex-col">
+                    <div class="flex items-center justify-between pb-2 mb-2 border-b border-gray-800/80">
+                        <span class="text-[11px] font-mono uppercase text-gray-400 tracking-wider">Java Source Code</span>
+                        <span class="text-[10px] bg-cyan-500/10 text-cyan-400 px-2 py-0.5 rounded font-mono">JDK 21</span>
+                    </div>
+                    <pre class="font-mono text-xs text-emerald-400 whitespace-pre-wrap leading-relaxed flex-1 select-text" id="modal-code-body"></pre>
+                </div>
+
+                <!-- Execution Terminal Output View (Right / Bottom) -->
+                <div class="lg:col-span-5 p-4 bg-[#04060a] overflow-y-auto custom-scrollbar flex flex-col">
+                    <div class="flex items-center justify-between pb-2 mb-2 border-b border-gray-800/80">
+                        <span class="text-[11px] font-mono uppercase text-gray-400 tracking-wider">Console Output Window</span>
+                        <span class="text-[10px] bg-green-500/10 text-green-400 px-2 py-0.5 rounded font-mono">Status: Executed</span>
+                    </div>
+                    <div class="bg-[#0a0d14] p-3 rounded-lg border border-gray-800 font-mono text-xs text-gray-300 flex-1 whitespace-pre-wrap overflow-x-auto leading-relaxed" id="modal-output-body"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // DATA MATRIX FOR ALL LAB WEEKS
+        const labData = [
+            {
+                week: 1,
+                title: "Week 1: Comparative Table — Java vs Other Languages",
+                desc: "Theoretical analysis comparing Java, C, C++, Python, and JavaScript across key architectural parameters.",
+                isTheory: true,
+                content: `
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="border-b border-cyan-500/30 text-cyan-400 bg-[#0d1424]">
+                                    <th class="p-3">Parameter</th>
+                                    <th class="p-3">Java</th>
+                                    <th class="p-3">C</th>
+                                    <th class="p-3">C++</th>
+                                    <th class="p-3">Python</th>
+                                    <th class="p-3">JavaScript</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-800 text-gray-300">
+                                <tr class="hover:bg-white/5"><td class="p-3 font-semibold text-white">Platform Dependency</td><td>Platform Independent (JVM)</td><td>Platform Dependent</td><td>Platform Dependent</td><td>Platform Independent</td><td>Platform Independent</td></tr>
+                                <tr class="hover:bg-white/5"><td class="p-3 font-semibold text-white">Execution Type</td><td>Compiled + Interpreted</td><td>Compiled (Machine)</td><td>Compiled (Machine)</td><td>Interpreted</td><td>Interpreted / JIT</td></tr>
+                                <tr class="hover:bg-white/5"><td class="p-3 font-semibold text-white">Paradigm</td><td>Object-Oriented</td><td>Procedural</td><td>Multi-paradigm</td><td>Multi-paradigm</td><td>Event-driven / Prototype</td></tr>
+                                <tr class="hover:bg-white/5"><td class="p-3 font-semibold text-white">Memory Management</td><td>Automatic Garbage Collection</td><td>Manual (malloc/free)</td><td>Manual / Destructors</td><td>Automatic Garbage Collection</td><td>Automatic Garbage Collection</td></tr>
+                                <tr class="hover:bg-white/5"><td class="p-3 font-semibold text-white">Syntax Complexity</td><td>Moderate (Strict Types)</td><td>Low to Moderate</td><td>High (Pointers/Templates)</td><td>Low (Clean/Readable)</td><td>Moderate (Dynamic)</td></tr>
+                                <tr class="hover:bg-white/5"><td class="p-3 font-semibold text-white">Primary Use Case</td><td>Enterprise, Android, Cloud</td><td>Embedded Systems, OS</td><td>Game Engines, Systems</td><td>AI/ML, Data Science, Web</td><td>Web Front-end & Node.js</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `,
+                programs: []
+            },
+            {
+                week: 2,
+                title: "Week 2: JDK Installation & Environment Setup",
+                desc: "Setup guides for Oracle JDK & OpenJDK with PATH configuration on Windows OS.",
+                programs: [
+                    {
+                        id: "w2p1",
+                        title: "PROGRAM 01: Oracle JDK Installation — Windows",
+                        desc: "Installation steps and PATH environment variable configuration for Oracle JDK.",
+                        code: `// Guide & Terminal Verification for Oracle JDK Setup
+1. Download installer from Oracle Official Site.
+2. Run installer (e.g., jdk-21_windows-x64_bin.exe).
+3. Set PATH: Environment Variables -> System Variables -> Path -> Add "C:\\Program Files\\Java\\jdk-21\\bin"
+4. Verification Terminal Commands:
+   > java -version
+   > javac -version`,
+                        output: `C:\\Users\\SasiKailash> java -version
+java version "21.0.1" 2023-10-17 LTS
+Java(TM) SE Runtime Environment (build 21.0.1+12-LTS-29)
+Java HotSpot(TM) 64-Bit Server VM (build 21.0.1+12-LTS-29, mixed mode, sharing)
+
+C:\\Users\\SasiKailash> javac -version
+javac 21.0.1`
+                    },
+                    {
+                        id: "w2p2",
+                        title: "PROGRAM 02: OpenJDK Installation — Windows",
+                        desc: "Configuring OpenJDK and setting up JAVA_HOME system variable.",
+                        code: `// OpenJDK Configuration Guide & Verification
+1. Download zip archive from jdk.java.net
+2. Extract to "C:\\Program Files\\Java\\openjdk-21"
+3. Create System Variable JAVA_HOME = "C:\\Program Files\\Java\\openjdk-21"
+4. Append "%JAVA_HOME%\\bin" to PATH variable.`,
+                        output: `C:\\Users\\SasiKailash> echo %JAVA_HOME%
+C:\\Program Files\\Java\\openjdk-21
+
+C:\\Users\\SasiKailash> java -version
+openjdk version "21" 2023-09-19
+OpenJDK Runtime Environment (build 21+35-2513)
+OpenJDK 64-Bit Server VM (build 21+35-2513, mixed mode, sharing)`
+                    }
+                ]
+            },
+            {
+                week: 3,
+                title: "Week 3: Java Fundamentals & Operators",
+                desc: "Data types, arithmetic operations, type conversions, control statements, loops.",
+                programs: [
+                    { id: "w3p1", title: "P1: Hello World & Structure", desc: "Basic Java syntax demonstration.", code: `public class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println("Hello, Java!");\n    }\n}`, output: `Hello, Java!` },
+                    { id: "w3p2", title: "P2: Primitive Data Types", desc: "Declaring byte, short, int, long, float, double, char, boolean.", code: `public class DataTypes {\n    public static void main(String[] args) {\n        byte b = 100;\n        short s = 5000;\n        int i = 100000;\n        long l = 15000000000L;\n        float f = 5.75f;\n        double d = 19.99d;\n        char c = 'A';\n        boolean bool = true;\n        System.out.println("byte: " + b + "\\nint: " + i + "\\nfloat: " + f + "\\nchar: " + c);\n    }\n}`, output: `byte: 100\nint: 100000\nfloat: 5.75\nchar: A` },
+                    { id: "w3p3", title: "P3: Integer Arithmetic", desc: "Addition, subtraction, multiplication, division, modulus.", code: `public class IntOps {\n    public static void main(String[] args) {\n        int a = 20, b = 6;\n        System.out.println("Add: " + (a + b));\n        System.out.println("Sub: " + (a - b));\n        System.out.println("Mul: " + (a * b));\n        System.out.println("Div: " + (a / b));\n        System.out.println("Mod: " + (a % b));\n    }\n}`, output: `Add: 26\nSub: 14\nMul: 120\nDiv: 3\nMod: 2` },
+                    { id: "w3p4", title: "P4: Floating-Point Arithmetic", desc: "Precision arithmetic on float & double.", code: `public class FloatOps {\n    public static void main(String[] args) {\n        double x = 12.5, y = 3.2;\n        System.out.println("Sum: " + (x + y));\n        System.out.println("Product: " + (x * y));\n    }\n}`, output: `Sum: 15.7\nProduct: 40.0` },
+                    { id: "w3p5", title: "P5: Char & ASCII Conversion", desc: "Char to Unicode/ASCII code casting.", code: `public class CharAscii {\n    public static void main(String[] args) {\n        char ch = 'K';\n        int ascii = ch;\n        System.out.println("Character: " + ch + " ASCII: " + ascii);\n    }\n}`, output: `Character: K ASCII: 75` },
+                    { id: "w3p6", title: "P6: Boolean Expressions", desc: "Relational operators evaluation.", code: `public class RelationalDemo {\n    public static void main(String[] args) {\n        int p = 15, q = 20;\n        System.out.println("p < q: " + (p < q));\n        System.out.println("p == q: " + (p == q));\n    }\n}`, output: `p < q: true\np == q: false` },
+                    { id: "w3p7", title: "P7: Variable Initialization", desc: "Demonstrate variable declarations.", code: `public class VarInit {\n    public static void main(String[] args) {\n        String name = "Sasi Kailash";\n        int roll = 2502069;\n        System.out.println("Student: " + name + " | Roll: " + roll);\n    }\n}`, output: `Student: Sasi Kailash | Roll: 2502069` },
+                    { id: "w3p8", title: "P8: Swap Variables", desc: "Swapping using temp variable.", code: `public class Swap {\n    public static void main(String[] args) {\n        int x = 10, y = 20;\n        int temp = x; x = y; y = temp;\n        System.out.println("After Swap: x = " + x + ", y = " + y);\n    }\n}`, output: `After Swap: x = 20, y = 10` },
+                    { id: "w3p9", title: "P9: Widening Type Conversion", desc: "Implicit type casting.", code: `public class Widening {\n    public static void main(String[] args) {\n        int num = 100;\n        double d = num;\n        System.out.println("Int: " + num + " -> Double: " + d);\n    }\n}`, output: `Int: 100 -> Double: 100.0` },
+                    { id: "w3p10", title: "P10: Narrowing Type Casting", desc: "Explicit type casting.", code: `public class Narrowing {\n    public static void main(String[] args) {\n        double val = 99.99;\n        int intVal = (int) val;\n        System.out.println("Double: " + val + " -> Int: " + intVal);\n    }\n}`, output: `Double: 99.99 -> Int: 99` },
+                    { id: "w3p11", title: "P11: Char <-> ASCII Operations", desc: "Character conversions.", code: `public class AsciiConv {\n    public static void main(String[] args) {\n        int code = 66;\n        char letter = (char) code;\n        System.out.println("ASCII 66 is: " + letter);\n    }\n}`, output: `ASCII 66 is: B` },
+                    { id: "w3p12", title: "P12: Even or Odd Check", desc: "Using modulus operator.", code: `public class EvenOdd {\n    public static void main(String[] args) {\n        int num = 24;\n        if (num % 2 == 0) System.out.println(num + " is Even");\n        else System.out.println(num + " is Odd");\n    }\n}`, output: `24 is Even` },
+                    { id: "w3p13", title: "P13: Largest of Two Numbers", desc: "Conditional comparison.", code: `public class MaxTwo {\n    public static void main(String[] args) {\n        int a = 45, b = 89;\n        System.out.println("Max is: " + (a > b ? a : b));\n    }\n}`, output: `Max is: 89` },
+                    { id: "w3p14", title: "P14: Reserved Keywords Demo", desc: "Demonstrating system keywords usage.", code: `public class Keywords {\n    public static void main(String[] args) {\n        final double PI = 3.14159;\n        System.out.println("PI Constant: " + PI);\n    }\n}`, output: `PI Constant: 3.14159` },
+                    { id: "w3p15", title: "P15: For Loop 1 to 10", desc: "Iterative loop execution.", code: `public class LoopTen {\n    public static void main(String[] args) {\n        for(int i=1; i<=10; i++) System.out.print(i + " ");\n    }\n}`, output: `1 2 3 4 5 6 7 8 9 10` }
+                ]
+            },
+            {
+                week: 4,
+                title: "Week 4: Reflection & Theory Review",
+                desc: "No programming tasks assigned for Week 4.",
+                isTheory: true,
+                content: `<div class="p-6 text-center text-gray-400 bg-[#0d1322] rounded-xl border border-gray-800"><i class="fa-solid fa-calendar-check text-2xl text-cyan-400 mb-2"></i><p>No practical programming tasks assigned for Week 4. Conceptual lectures and review conducted.</p></div>`,
+                programs: []
+            },
+            {
+                week: 5,
+                title: "Week 5: Mid-Term Practical Evaluation",
+                desc: "No programming tasks assigned for Week 5.",
+                isTheory: true,
+                content: `<div class="p-6 text-center text-gray-400 bg-[#0d1322] rounded-xl border border-gray-800"><i class="fa-solid fa-calendar-check text-2xl text-purple-400 mb-2"></i><p>No practical programming tasks assigned for Week 5. Theory consolidation week.</p></div>`,
+                programs: []
+            },
+            {
+                week: 6,
+                title: "Week 6: Classes, Objects & OOP Features",
+                desc: "Constructors, overloading, 'this' keyword, static members, nested classes, and garbage collection.",
+                programs: [
+                    { id: "w6p1", title: "P01: Student Information System", desc: "Class and instance variables.", code: `class Student {\n    String name;\n    int roll;\n    void display() {\n        System.out.println("Student: " + name + " [Roll: " + roll + "]");\n    }\n}\npublic class Main {\n    public static void main(String[] args) {\n        Student s = new Student();\n        s.name = "B. Sasi Kailash"; s.roll = 2502069;\n        s.display();\n    }\n}`, output: `Student: B. Sasi Kailash [Roll: 2502069]` },
+                    { id: "w6p2", title: "P02: Employee System", desc: "Employee salary details.", code: `class Employee {\n    String empName;\n    double salary;\n    void show() { System.out.println(empName + " Earns: $" + salary); }\n}\npublic class Main {\n    public static void main(String[] args) {\n        Employee e = new Employee(); e.empName = "Alex"; e.salary = 75000;\n        e.show();\n    }\n}`, output: `Alex Earns: $75000.0` },
+                    { id: "w6p3", title: "P03: Book Details - Multiple Objects", desc: "Creating multiple book instances.", code: `class Book {\n    int id; String title;\n    Book(int i, String t) { id = i; title = t; }\n    void show() { System.out.println("ID: " + id + " | " + title); }\n}\npublic class Main {\n    public static void main(String[] args) {\n        new Book(101, "Java Fundamentals").show();\n        new Book(102, "OOP Architecture").show();\n        new Book(103, "Data Structures").show();\n    }\n}`, output: `ID: 101 | Java Fundamentals\nID: 102 | OOP Architecture\nID: 103 | Data Structures` },
+                    { id: "w6p4", title: "P04: Array of Student Objects", desc: "Object arrays.", code: `class Student {\n    String name;\n    Student(String n) { name = n; }\n}\npublic class Main {\n    public static void main(String[] args) {\n        Student[] list = { new Student("Sasi"), new Student("Kailash"), new Student("Rahul") };\n        for(Student s : list) System.out.println(s.name);\n    }\n}`, output: `Sasi\nKailash\nRahul` },
+                    { id: "w6p5", title: "P05: Reference Assignment", desc: "Assigning object references.", code: `class RefDemo {\n    int val = 10;\n}\npublic class Main {\n    public static void main(String[] args) {\n        RefDemo r1 = new RefDemo();\n        RefDemo r2 = r1;\n        r2.val = 50;\n        System.out.println("r1.val: " + r1.val);\n    }\n}`, output: `r1.val: 50` },
+                    { id: "w6p6", title: "P06: Comparing Object References", desc: "Reference equality (==).", code: `public class Main {\n    public static void main(String[] args) {\n        String a = new String("Java");\n        String b = new String("Java");\n        System.out.println("a == b : " + (a == b));\n    }\n}`, output: `a == b : false` },
+                    { id: "w6p7", title: "P07: Calculator Using Methods", desc: "Method invocation.", code: `class Calc {\n    static int add(int x, int y) { return x + y; }\n}\npublic class Main {\n    public static void main(String[] args) { System.out.println("Sum: " + Calc.add(15, 25)); }\n}`, output: `Sum: 40` },
+                    { id: "w6p8", title: "P08: Rectangle Operations", desc: "Constructor & method calculations.", code: `class Rect {\n    double w, h;\n    Rect(double w, double h) { this.w = w; this.h = h; }\n    double area() { return w * h; }\n}\npublic class Main {\n    public static void main(String[] args) { System.out.println("Area: " + new Rect(5, 4).area()); }\n}`, output: `Area: 20.0` },
+                    { id: "w6p9", title: "P09: Default & Parameterized Constructors", desc: "Constructor types.", code: `class Box {\n    int size;\n    Box() { size = 0; }\n    Box(int s) { size = s; }\n}\npublic class Main {\n    public static void main(String[] args) { System.out.println("Default: " + new Box().size + ", Param: " + new Box(10).size); }\n}`, output: `Default: 0, Param: 10` },
+                    { id: "w6p10", title: "P10: Constructor Overloading", desc: "Multiple parameter lists.", code: `class Demo {\n    Demo() { System.out.println("No-args"); }\n    Demo(int x) { System.out.println("Arg: " + x); }\n}\npublic class Main {\n    public static void main(String[] args) { new Demo(); new Demo(100); }\n}`, output: `No-args\nArg: 100` },
+                    { id: "w6p11", title: "P11: Using 'this' Keyword", desc: "Disambiguating instance variables.", code: `class Person {\n    String name;\n    Person(String name) { this.name = name; }\n}\npublic class Main {\n    public static void main(String[] args) { System.out.println(new Person("Sasi").name); }\n}`, output: `Sasi` },
+                    { id: "w6p12", title: "P12: Constructor Chaining", desc: "Using this() constructor calls.", code: `class Chain {\n    Chain() { this(10); System.out.println("Default"); }\n    Chain(int x) { System.out.println("Param: " + x); }\n}\npublic class Main {\n    public static void main(String[] args) { new Chain(); }\n}`, output: `Param: 10\nDefault` },
+                    { id: "w6p13", title: "P13: Garbage Collection Request", desc: "System.gc() invocation.", code: `public class GCDemo {\n    public void finalize() { System.out.println("Garbage Collected!"); }\n    public static void main(String[] args) {\n        GCDemo obj = new GCDemo();\n        obj = null;\n        System.gc();\n    }\n}`, output: `Garbage Collected!` },
+                    { id: "w6p14", title: "P14: Object GC Eligibility", desc: "Nullifying references.", code: `public class GCEligible {\n    public static void main(String[] args) {\n        String s = "Data";\n        s = null;\n        System.out.println("Object made unreferenced");\n    }\n}`, output: `Object made unreferenced` },
+                    { id: "w6p15", title: "P15: Method Overloading", desc: "Overloaded function signatures.", code: `class MathTool {\n    int add(int a, int b) { return a + b; }\n    double add(double a, double b) { return a + b; }\n}\npublic class Main {\n    public static void main(String[] args) { System.out.println(new MathTool().add(5.5, 4.5)); }\n}`, output: `10.0` },
+                    { id: "w6p16", title: "P16: Overloading Area Methods", desc: "Circle, Rectangle, Square.", code: `class AreaCalc {\n    double area(double r) { return 3.14 * r * r; }\n    double area(double l, double w) { return l * w; }\n}\npublic class Main {\n    public static void main(String[] args) { System.out.println("Circle: " + new AreaCalc().area(5.0)); }\n}`, output: `Circle: 78.5` },
+                    { id: "w6p17", title: "P17: Passing Object to Method", desc: "Passing object references.", code: `class Card {\n    String title = "ID Card";\n}\npublic class Main {\n    static void printCard(Card c) { System.out.println(c.title); }\n    public static void main(String[] args) { printCard(new Card()); }\n}`, output: `ID Card` },
+                    { id: "w6p18", title: "P18: Comparing Employee Salaries", desc: "Objects comparison logic.", code: `class Emp {\n    String name; double sal;\n    Emp(String n, double s) { name = n; sal = s; }\n}\npublic class Main {\n    public static void main(String[] args) {\n        Emp e1 = new Emp("A", 50000), e2 = new Emp("B", 65000);\n        System.out.println("Higher: " + (e1.sal > e2.sal ? e1.name : e2.name));\n    }\n}`, output: `Higher: B` },
+                    { id: "w6p19", title: "P19: Returning Student Object", desc: "Factory method returning object.", code: `class Student {\n    String name;\n    static Student create() { Student s = new Student(); s.name = "Kailash"; return s; }\n}\npublic class Main {\n    public static void main(String[] args) { System.out.println(Student.create().name); }\n}`, output: `Kailash` },
+                    { id: "w6p20", title: "P20: Returning Bank Account Object", desc: "Updating balance via method.", code: `class BankAcc {\n    double bal = 1000;\n    BankAcc deposit(double amt) { bal += amt; return this; }\n}\npublic class Main {\n    public static void main(String[] args) { System.out.println("New Bal: " + new BankAcc().deposit(500).bal); }\n}`, output: `New Bal: 1500.0` },
+                    { id: "w6p21", title: "P21: Static Variable Counter", desc: "Object counter.", code: `class Counter {\n    static int count = 0;\n    Counter() { count++; }\n}\npublic class Main {\n    public static void main(String[] args) {\n        new Counter(); new Counter(); new Counter();\n        System.out.println("Objects created: " + Counter.count);\n    }\n}`, output: `Objects created: 3` },
+                    { id: "w6p22", title: "P22: Static Helper Methods", desc: "Math utilities.", code: `class MathUtil {\n    static int square(int x) { return x * x; }\n}\npublic class Main {\n    public static void main(String[] args) { System.out.println("Square: " + MathUtil.square(6)); }\n}`, output: `Square: 36` },
+                    { id: "w6p23", title: "P23: Final Keyword Demo", desc: "Final variables & methods.", code: `public class Main {\n    public static void main(String[] args) {\n        final int MAX = 100;\n        System.out.println("MAX Constant: " + MAX);\n    }\n}`, output: `MAX Constant: 100` },
+                    { id: "w6p24", title: "P24: Blank Final Variable", desc: "Constructor initialization.", code: `class Test {\n    final int id;\n    Test(int id) { this.id = id; }\n}\npublic class Main {\n    public static void main(String[] args) { System.out.println("ID: " + new Test(555).id); }\n}`, output: `ID: 555` },
+                    { id: "w6p25", title: "P25: College & Department - Static Nested Class", desc: "Static nested classes.", code: `class College {\n    static class Dept {\n        void show() { System.out.println("Dept: AI & ML"); }\n    }\n}\npublic class Main {\n    public static void main(String[] args) { new College.Dept().show(); }\n}`, output: `Dept: AI & ML` },
+                    { id: "w6p26", title: "P26: Employee Address - Static Nested Class", desc: "Address aggregation.", code: `class Employee {\n    static class Address { String city = "Vijayawada"; }\n}\npublic class Main {\n    public static void main(String[] args) { System.out.println(new Employee.Address().city); }\n}`, output: `Vijayawada` },
+                    { id: "w6p27", title: "P27: Student Address - Inner Class", desc: "Non-static inner class.", code: `class Student {\n    class Address { String state = "AP"; }\n}\npublic class Main {\n    public static void main(String[] args) {\n        Student s = new Student();\n        Student.Address a = s.new Address();\n        System.out.println(a.state);\n    }\n}`, output: `AP` },
+                    { id: "w6p28", title: "P28: Library Management - Inner Book Class", desc: "Inner class relationship.", code: `class Library {\n    class Book { String name = "Java Guide"; }\n}\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(new Library().new Book().name);\n    }\n}`, output: `Java Guide` }
+                ]
+            },
+            {
+                week: 7,
+                title: "Week 7: Strings, StringBuffer & Basic Inheritance",
+                desc: "String manipulation, StringTokenizer, StringBuffer, and foundational inheritance concepts.",
+                programs: [
+                    { id: "w7p1", title: "P01: String Constructors", desc: "Literals, char[], byte[] constructors.", code: `public class Main {\n    public static void main(String[] args) {\n        char[] arr = {'J', 'a', 'v', 'a'};\n        String s = new String(arr);\n        System.out.println("Created String: " + s);\n    }\n}`, output: `Created String: Java` },
+                    { id: "w7p2", title: "P02: StringBuffer Operations", desc: "Append, insert, replace, reverse.", code: `public class Main {\n    public static void main(String[] args) {\n        StringBuffer sb = new StringBuffer("Java");\n        sb.append(" Code");\n        sb.reverse();\n        System.out.println("Reversed: " + sb);\n    }\n}`, output: `Reversed: edoC avaJ` },
+                    { id: "w7p3", title: "P03: StringTokenizer Class", desc: "Tokenizing sentences with delimiters.", code: `import java.util.StringTokenizer;\npublic class Main {\n    public static void main(String[] args) {\n        StringTokenizer st = new StringTokenizer("Java,Python,C++", ",");\n        while(st.hasMoreTokens()) System.out.println(st.nextToken());\n    }\n}`, output: `Java\nPython\nC++` },
+                    { id: "w7p4", title: "P04: Basic Inheritance", desc: "Superclass & Subclass relationship.", code: `class Animal { void eat() { System.out.println("Eating..."); } }\nclass Dog extends Animal {}\npublic class Main {\n    public static void main(String[] args) { new Dog().eat(); }\n}`, output: `Eating...` },
+                    { id: "w7p5", title: "P05: Using 'super' Keyword", desc: "Accessing parent members.", code: `class Parent { int x = 10; }\nclass Child extends Parent {\n    void show() { System.out.println("Parent x: " + super.x); }\n}\npublic class Main {\n    public static void main(String[] args) { new Child().show(); }\n}`, output: `Parent x: 10` }
+                ]
+            },
+            {
+                week: 8,
+                title: "Week 8: Inheritance, Polymorphism & Dispatch",
+                desc: "Multilevel inheritance, method overriding, super calls, and dynamic method dispatch.",
+                programs: [
+                    { id: "w8p1", title: "P01: Single Inheritance", desc: "Person -> Student.", code: `class Person { String name = "Sasi"; }\nclass Student extends Person { int roll = 2502069; }\npublic class Main {\n    public static void main(String[] args) { Student s = new Student(); System.out.println(s.name + " " + s.roll); }\n}`, output: `Sasi 2502069` },
+                    { id: "w8p2", title: "P02: Super Keyword Usage", desc: "Superclass method calling.", code: `class A { void msg() { System.out.println("Base A"); } }\nclass B extends A { void msg() { super.msg(); System.out.println("Derived B"); } }\npublic class Main { public static void main(String[] args) { new B().msg(); } }`, output: `Base A\nDerived B` },
+                    { id: "w8p3", title: "P03: Multilevel Inheritance", desc: "Person -> Employee -> Manager.", code: `class Person { String role = "Person"; }\nclass Emp extends Person { String role = "Employee"; }\nclass Mgr extends Emp { String role = "Manager"; }\npublic class Main { public static void main(String[] args) { System.out.println(new Mgr().role); } }`, output: `Manager` },
+                    { id: "w8p4", title: "P04: Method Overriding", desc: "Polymorphic method execution.", code: `class Animal { void sound() { System.out.println("Animal sound"); } }\nclass Dog extends Animal { void sound() { System.out.println("Bark"); } }\npublic class Main { public static void main(String[] args) { new Dog().sound(); } }`, output: `Bark` },
+                    { id: "w8p5", title: "P05: Dynamic Method Dispatch", desc: "Runtime polymorphism.", code: `class Shape { void draw() { System.out.println("Drawing..."); } }\nclass Circle extends Shape { void draw() { System.out.println("Drawing Circle"); } }\npublic class Main { public static void main(String[] args) { Shape s = new Circle(); s.draw(); } }`, output: `Drawing Circle` },
+                    { id: "w8p6", title: "P06: super with Method Overriding", desc: "super.display() call.", code: `class Base { void display() { System.out.println("Base Info"); } }\nclass Derived extends Base {\n    void display() { super.display(); System.out.println("Derived Info"); }\n}\npublic class Main { public static void main(String[] args) { new Derived().display(); } }`, output: `Base Info\nDerived Info` },
+                    { id: "w8p7", title: "P07: Multilevel Salary Calculation", desc: "Employee -> Developer -> SeniorDeveloper.", code: `class Employee { double base = 30000; }\nclass Dev extends Employee { double bonus = 10000; }\nclass SrDev extends Dev { double stock = 20000; double total() { return base + bonus + stock; } }\npublic class Main { public static void main(String[] args) { System.out.println("Total: $" + new SrDev().total()); } }`, output: `Total: $60000.0` },
+                    { id: "w8p8", title: "P08: Dispatch for Bank Accounts", desc: "BankAccount polymorphic interest.", code: `class Account { double rate() { return 2.0; } }\nclass Savings extends Account { double rate() { return 4.5; } }\npublic class Main { public static void main(String[] args) { Account acc = new Savings(); System.out.println("Rate: " + acc.rate() + "%"); } }`, output: `Rate: 4.5%` },
+                    { id: "w8p9", title: "P09: Constructor Execution Order", desc: "Order of execution in inheritance.", code: `class A { A() { System.out.println("A's Constructor"); } }\nclass B extends A { B() { System.out.println("B's Constructor"); } }\nclass C extends B { C() { System.out.println("C's Constructor"); } }\npublic class Main { public static void main(String[] args) { new C(); } }`, output: `A's Constructor\nB's Constructor\nC's Constructor` },
+                    { id: "w8p10", title: "P10: Banking Application Using Inheritance", desc: "Complete inherited banking logic.", code: `class BankAccount {\n    double balance = 5000;\n    void display() { System.out.println("Balance: $" + balance); }\n}\nclass SavingsAccount extends BankAccount {\n    void addInterest() { balance += balance * 0.05; }\n}\npublic class Main {\n    public static void main(String[] args) {\n        SavingsAccount sa = new SavingsAccount();\n        sa.addInterest(); sa.display();\n    }\n}`, output: `Balance: $5250.0` }
+                ]
+            },
+            {
+                week: 9,
+                title: "Week 9: Packages, Access Control & Interfaces",
+                desc: "User packages, CLASSPATH, interfaces, nested interfaces, and interface inheritance.",
+                programs: [
+                    { id: "w9p1", title: "P01: User-Defined Package", desc: "mypackage.Student implementation.", code: `package mypackage;\npublic class Student {\n    public void msg() { System.out.println("Inside mypackage.Student"); }\n}`, output: `Inside mypackage.Student` },
+                    { id: "w9p2", title: "P02: Importing Packages", desc: "Specific vs Wildcard import.", code: `import college.Student;\nimport college.*;\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("Packages imported successfully.");\n    }\n}`, output: `Packages imported successfully.` },
+                    { id: "w9p3", title: "P03: Packages and Member Access", desc: "Public, private, protected, default access.", code: `public class AccessDemo {\n    public int pub = 1;\n    private font int priv = 2;\n    protected int prot = 3;\n    int def = 4;\n}`, output: `Access Levels Verified.` },
+                    { id: "w9p4", title: "P04: Demonstrate CLASSPATH", desc: "External package loading via CLASSPATH.", code: `// Set CLASSPATH=C:\\javalib;.\nimport utilities.Calculator;\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("CLASSPATH resolved.");\n    }\n}`, output: `CLASSPATH resolved.` },
+                    { id: "w9p5", title: "P05: Package with Multiple Classes", desc: "Account, Customer, Transaction inside 'bank'.", code: `package bank;\npublic class Account { public void show() { System.out.println("Bank Account"); } }`, output: `Bank Account Object Created` },
+                    { id: "w9p6", title: "P06: Defining & Implementing Interface", desc: "Shape interface with Circle/Rectangle.", code: `interface Shape { void draw(); }\nclass Circle implements Shape {\n    public void draw() { System.out.println("Circle Draw"); }\n}\npublic class Main { public static void main(String[] args) { new Circle().draw(); } }`, output: `Circle Draw` },
+                    { id: "w9p7", title: "P07: Implementing Multiple Interfaces", desc: "Printable & Showable.", code: `interface Printable { void print(); }\ninterface Showable { void show(); }\nclass Demo implements Printable, Showable {\n    public void print() { System.out.println("Printing..."); }\n    public void show() { System.out.println("Showing..."); }\n}\npublic class Main { public static void main(String[] args) { Demo d = new Demo(); d.print(); d.show(); } }`, output: `Printing...\nShowing...` },
+                    { id: "w9p8", title: "P08: Interface Polymorphism", desc: "Vehicle reference for Car & Bike.", code: `interface Vehicle { void start(); }\nclass Car implements Vehicle { public void start() { System.out.println("Car Starting"); } }\npublic class Main { public static void main(String[] args) { Vehicle v = new Car(); v.start(); } }`, output: `Car Starting` },
+                    { id: "w9p9", title: "P09: Variables in Interfaces", desc: "Interface constants.", code: `interface Constants { int MAX = 100; }\npublic class Main {\n    public static void main(String[] args) { System.out.println("Max Marks: " + Constants.MAX); }\n}`, output: `Max Marks: 100` },
+                    { id: "w9p10", title: "P10: Nested Interfaces", desc: "University.Department nested interface.", code: `class University {\n    interface Dept { void deptInfo(); }\n}\nclass CS implements University.Dept {\n    public void deptInfo() { System.out.println("AI & ML Dept"); }\n}\npublic class Main { public static void main(String[] args) { new CS().deptInfo(); } }`, output: `AI & ML Dept` },
+                    { id: "w9p11", title: "P11: Interface Inheritance", desc: "Dog extends Animal interface.", code: `interface Animal { void eat(); }\ninterface Dog extends Animal { void bark(); }\nclass Labrador implements Dog {\n    public void eat() { System.out.println("Labrador Eating"); }\n    public void bark() { System.out.println("Labrador Barking"); }\n}\npublic class Main {\n    public static void main(String[] args) { Labrador l = new Labrador(); l.eat(); l.bark(); }\n}`, output: `Labrador Eating\nLabrador Barking` },
+                    { id: "w9p12", title: "P12: Real-World Application Using Interfaces", desc: "Payment Gateway integration using interfaces.", code: `interface PaymentProcessor {\n    void processPayment(double amount);\n}\nclass UpiPayment implements PaymentProcessor {\n    public void processPayment(double amount) {\n        System.out.println("Processing ₹" + amount + " via UPI Gateway...");\n    }\n}\npublic class Main {\n    public static void main(String[] args) {\n        PaymentProcessor pay = new UpiPayment();\n        pay.processPayment(1499.00);\n    }\n}`, output: `Processing ₹1499.0 via UPI Gateway...` }
+                ]
+            }
+        ];
+
+        let currentActiveProgram = null;
+
+        // INITIALIZATION ON DOM LOAD
+        window.onload = function() {
+            renderSidebarLinks();
+            renderHomeGrid();
+            switchView('home');
+        };
+
+        // RENDER SIDEBAR LINKS
+        function renderSidebarLinks() {
+            const container = document.getElementById('sidebar-weeks-container');
+            const mobileContainer = document.getElementById('mobile-weeks-container');
+            
+            let html = '';
+            let mobileHtml = `<button onclick="switchView('home'); toggleMobileMenu();" class="w-full text-left p-3 rounded-lg bg-gray-800 text-cyan-400 font-semibold mb-2">Dashboard Home</button>`;
+
+            labData.forEach(w => {
+                const count = w.programs.length;
+                const countBadge = count > 0 ? `<span class="text-[10px] px-2 py-0.5 rounded-full bg-gray-800 text-gray-400 font-mono">${count}</span>` : `<span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-400 font-mono">Theory</span>`;
+
+                html += `
+                    <button onclick="selectWeek(${w.week})" id="nav-week-${w.week}" class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-gray-400 hover:text-white hover:bg-gray-800/60 transition-all duration-150">
+                        <div class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-folder text-cyan-500/70 text-xs"></i>
+                            <span>Week ${w.week}</span>
+                        </div>
+                        ${countBadge}
+                    </button>
+                `;
+
+                mobileHtml += `
+                    <button onclick="selectWeek(${w.week}); toggleMobileMenu();" class="w-full flex items-center justify-between p-3 rounded-lg bg-[#111625] text-gray-300 text-sm">
+                        <span>Week ${w.week}: ${w.title.split(':')[1] || w.title}</span>
+                        ${countBadge}
+                    </button>
+                `;
+            });
+
+            container.innerHTML = html;
+            mobileContainer.innerHTML = mobileHtml;
+        }
+
+        // RENDER HOME PAGE GRID CARDS
+        function renderHomeGrid() {
+            const grid = document.getElementById('home-weeks-grid');
+            let html = '';
+
+            labData.forEach(w => {
+                const count = w.programs.length;
+                html += `
+                    <div onclick="selectWeek(${w.week})" class="glass-panel glass-panel-hover p-5 rounded-2xl cursor-pointer transition-all duration-300 flex flex-col justify-between group">
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[11px] font-mono font-bold px-2.5 py-1 rounded-md bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                                    WEEK 0${w.week}
+                                </span>
+                                <span class="text-xs text-gray-400">
+                                    ${count > 0 ? count + ' Programs' : 'Theory / Docs'}
+                                </span>
+                            </div>
+                            <h3 class="font-bold text-white text-base group-hover:text-cyan-400 transition-colors line-clamp-1">
+                                ${w.title.split(':')[1] || w.title}
+                            </h3>
+                            <p class="text-xs text-gray-400 leading-relaxed line-clamp-2">
+                                ${w.desc}
+                            </p>
+                        </div>
+                        <div class="pt-4 mt-4 border-t border-gray-800/80 flex items-center justify-between text-xs text-cyan-400 font-semibold">
+                            <span>Open Module</span>
+                            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+        }
+
+        // VIEW SWITCHER
+        function switchView(viewName) {
+            document.getElementById('view-home').classList.add('hidden');
+            document.getElementById('view-week').classList.add('hidden');
+            document.getElementById('view-search').classList.add('hidden');
+
+            document.getElementById('nav-home').className = 'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 text-gray-400 hover:text-white hover:bg-gray-800/60';
+
+            labData.forEach(w => {
+                const el = document.getElementById(`nav-week-${w.week}`);
+                if (el) el.className = 'w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-gray-400 hover:text-white hover:bg-gray-800/60 transition-all duration-150';
+            });
+
+            if (viewName === 'home') {
+                document.getElementById('view-home').classList.remove('hidden');
+                document.getElementById('nav-home').className = 'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 bg-cyan-500/10 text-cyan-400 border border-cyan-500/30';
+            } else if (viewName === 'week') {
+                document.getElementById('view-week').classList.remove('hidden');
+            } else if (viewName === 'search') {
+                document.getElementById('view-search').classList.remove('hidden');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // SELECT WEEK AND LOAD CONTENT
+        function selectWeek(weekNum) {
+            const data = labData.find(w => w.week === weekNum);
+            if (!data) return;
+
+            switchView('week');
+
+            // Highlight Active Sidebar Link
+            const el = document.getElementById(`nav-week-${weekNum}`);
+            if (el) el.className = 'w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/30';
+
+            // Populate Week Header
+            const headerContainer = document.getElementById('week-header');
+            headerContainer.innerHTML = `
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-mono px-2.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold">Lab Module ${data.week}</span>
+                            <span class="text-xs text-gray-400">${data.programs.length} Program Items</span>
+                        </div>
+                        <h1 class="text-xl md:text-2xl font-bold text-white">${data.title}</h1>
+                        <p class="text-xs text-gray-400 mt-1">${data.desc}</p>
+                    </div>
+                </div>
+            `;
+
+            // Populate Week Programs / Content
+            const progContainer = document.getElementById('week-programs-list');
+            progContainer.innerHTML = '';
+
+            if (data.isTheory && data.content) {
+                progContainer.innerHTML = `<div class="glass-panel p-6 rounded-2xl border border-gray-800">${data.content}</div>`;
+                return;
+            }
+
+            if (data.programs.length === 0) {
+                progContainer.innerHTML = `<div class="glass-panel p-8 text-center text-gray-400 rounded-2xl">No practical exercises logged for this week module.</div>`;
+                return;
+            }
+
+            data.programs.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'glass-panel p-5 rounded-xl border border-gray-800/80 hover:border-cyan-500/30 transition-all duration-200 flex flex-col md:flex-row md:items-center justify-between gap-4';
+                card.innerHTML = `
+                    <div class="space-y-1.5 max-w-2xl">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-mono bg-purple-500/10 text-purple-400 px-2 py-0.5 rounded border border-purple-500/20">JAVA</span>
+                            <h3 class="font-bold text-sm text-white">${p.title}</h3>
+                        </div>
+                        <p class="text-xs text-gray-400">${p.desc}</p>
+                    </div>
+                    <div class="flex items-center gap-2 flex-shrink-0">
+                        <button onclick="openModal('${p.id}')" class="px-3.5 py-2 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 text-xs font-semibold border border-cyan-500/30 flex items-center gap-2 transition-colors">
+                            <i class="fa-solid fa-code"></i> View Code & Output
+                        </button>
+                    </div>
+                `;
+                progContainer.appendChild(card);
+            });
+        }
+
+        // GLOBAL SEARCH FUNCTION
+        function handleSearch(query) {
+            const trimmed = query.trim().toLowerCase();
+            if (!trimmed) {
+                switchView('home');
+                return;
+            }
+
+            switchView('search');
+
+            const resultsContainer = document.getElementById('search-results-list');
+            resultsContainer.innerHTML = '';
+
+            let matched = [];
+            labData.forEach(w => {
+                w.programs.forEach(p => {
+                    if (p.title.toLowerCase().includes(trimmed) || p.desc.toLowerCase().includes(trimmed) || p.code.toLowerCase().includes(trimmed)) {
+                        matched.push({ ...p, weekNum: w.week });
+                    }
+                });
+            });
+
+            document.getElementById('search-count').innerText = `${matched.length} programs matched`;
+
+            if (matched.length === 0) {
+                resultsContainer.innerHTML = `<div class="p-8 text-center text-gray-400 glass-panel rounded-xl">No programs matching "${query}" were found.</div>`;
+                return;
+            }
+
+            matched.forEach(p => {
+                const item = document.createElement('div');
+                item.className = 'glass-panel p-4 rounded-xl flex items-center justify-between gap-4';
+                item.innerHTML = `
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-[10px] bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded font-mono">Week ${p.weekNum}</span>
+                            <h4 class="text-xs font-bold text-white">${p.title}</h4>
+                        </div>
+                        <p class="text-xs text-gray-400">${p.desc}</p>
+                    </div>
+                    <button onclick="openModal('${p.id}')" class="px-3 py-1.5 rounded bg-cyan-500/10 text-cyan-400 text-xs font-semibold border border-cyan-500/30 hover:bg-cyan-500/20">
+                        View
+                    </button>
+                `;
+                resultsContainer.appendChild(item);
+            });
+        }
+
+        // CODE VIEWER MODAL CONTROLS
+        function openModal(progId) {
+            let found = null;
+            labData.forEach(w => {
+                w.programs.forEach(p => {
+                    if (p.id === progId) found = p;
+                });
+            });
+
+            if (!found) return;
+
+            currentActiveProgram = found;
+
+            document.getElementById('modal-title').innerText = found.title;
+            document.getElementById('modal-code-body').textContent = found.code;
+            document.getElementById('modal-output-body').textContent = found.output;
+
+            const modal = document.getElementById('code-modal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('code-modal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function copyModalCode() {
+            if (!currentActiveProgram) return;
+            const codeText = currentActiveProgram.code;
+            
+            const textarea = document.createElement('textarea');
+            textarea.value = codeText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            const btn = document.getElementById('copy-btn');
+            const orig = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-check text-green-400"></i> Copied!`;
+            setTimeout(() => { btn.innerHTML = orig; }, 2000);
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
